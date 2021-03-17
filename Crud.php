@@ -79,6 +79,54 @@
             return $result;
         }
 
+        public function readNumbersWithFilterAndSortings($page = 1, $filters = [], $sortings = []) { 
+            $numbers =  $this->entityManager->getRepository(Number::class)->findBy($filters, $sortings);
+
+            $result = [
+                'page' => 1,
+                'data' => $numbers,
+                'pages' => 1
+            ];
+
+            return $result;
+        }
+
+        public function readNumbers($page = 1, $filters = [], $sortings = []) {               
+            // get the user repository
+            $numbers =  $this->entityManager->getRepository(Number::class)->findBy($filters, $sortings);
+
+            /*// build the query for the doctrine paginator
+            $query = $numbers->createQueryBuilder('n')
+                ->getQuery();
+
+            //set page size
+            $pageSize = self::PER_PAGE;
+
+            // load doctrine Paginator
+            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+
+            // you can get total items
+            $totalItems = count($paginator);
+
+            // get total pages
+            $pagesCount = ceil($totalItems / $pageSize);
+
+            // now get one page's items:
+            $paginator
+                ->getQuery()
+                ->setFirstResult($pageSize * ($page-1)) // set the offset
+                ->setMaxResults($pageSize); // set the limit*/
+
+            $result = [
+                'page' => 1, //$page,
+                //'data' => $paginator,
+                'data' => $numbers,
+                'pages' => 1//$pagesCount
+            ];
+
+            return $result;
+        }
+
         public function updateNumber($slug, $title, $text, $transcription) {
 
         }

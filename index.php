@@ -10,7 +10,10 @@
         $page = $_GET['page'];
     }
 
-    $pagination = $crudInterface->readNumbersPaginate($page);
+    //$pagination = $crudInterface->readNumbersPaginate($page);
+    $filters = (isset($_GET['filters']))?array_filter($_GET['filters']):[];
+    $sortings = (isset($_GET['sortings']))?array_filter($_GET['sortings']):[];;
+    $pagination = $crudInterface->readNumbersWithFilterAndSortings($page, $filters, $sortings);
     $numbers = $pagination['data'];
     $currentPage = $pagination['page'];
     $pages = $pagination['pages'];
@@ -25,6 +28,15 @@
         echo "<td>TRANSCRIPTION</td>";
         echo "<td>ACTIONS</td>";
     echo "</th><tbody>";
+    echo "<tr><form method='GET' action='/'>";
+        echo "<td>Find</td>";   
+        echo "<td><input type='text' name='filters[slug]'></td>";
+        echo "<td><input type='text' name='filters[title]'></td>";
+        echo "<td><input type='text' name='filters[text]'></td>";
+        echo "<td><input type='text' name='filters[number]'></td>";
+        echo "<td><input type='text' name='filters[transcription]'></td>";
+        echo "<td><input type='submit' value='search'></td>";
+    echo "</form></tr>";
     foreach($numbers as $number) {
         $numberId = $number->getId();
         echo "<tr>";
@@ -48,7 +60,7 @@
 
     echo "
     <h1>CREATE NEW NUMBER</h1>
-    <form action='/router.php' method='GET'>
+    <form action='/route.php' method='GET'>
         <label>Slug<input type='text' name='slug'></label>
         <label>Title<input type='text' name='title'></label>
         <label>Text<input type='text' name='text'></label>
