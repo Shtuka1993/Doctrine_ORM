@@ -5,37 +5,26 @@
     
     $crudInterface = new Crud($entityManager);
 
-    $numbers = $crudInterface->readAllNumbers();
-    //$headers = ["#", "ID", "TITLE", "TEXT", "NUMBER", "TRANSCRIPT", "DATE", "ACTIONS"];
-    $headers = ["#", "ID", "TITLE", "TEXT", "NUMBER", "TRANSCRIPT", "ACTIONS"];
-    $items = [
-        ["1", "A0", "Zero", "Null", "0", "Нуль"], 
-        ["2", "A1", "One", "Eins", "1", "Айнс"], 
-        ["3", "A2", "Two", "Zwei", "2", "Цвай"], 
-        ["4", "A3", "Three", "Drei", "3", "Драй"], 
-        ["5", "A4", "Four", "Vier", "4", "Фір"], 
-        ["6", "A5", "Five", "funf", "5", "Фюнф"], 
-        ["7", "A6", "Six", "sechs", "6", "Зекс"],
-        ["8", "A7", "Seven", "sieben", "7", "Зібен"],
-        ["9", "A8", "Eight", "acht", "8", "Ахт"],
-        ["10", "A9", "Nine", "neun", "9", "Нойн"],
-        ["11", "A10", "Ten", "Zehn", "10", "Цейн"]
-    ];
+    $page = 1;
+    if(isset($_GET['page'])) {
+        $page = $_GET['page'];
+    }
+
+    $pagination = $crudInterface->readNumbersPaginate($page);
+    $numbers = $pagination['data'];
+    $currentPage = $pagination['page'];
+    $pages = $pagination['pages'];
     echo "<h1>CRUD Example with Doctrine</h1>";
     echo "<table>";
     echo "<th>";
-        foreach($headers as $header) {
-            echo "<td>".$header."</td>";
-        }
+        echo "<td>#</td>";   
+        echo "<td>ID</td>";
+        echo "<td>TITLE</td>";
+        echo "<td>TEXT</td>";
+        echo "<td>NUMBER</td>";
+        echo "<td>TRANSCRIPTION</td>";
+        echo "<td>ACTIONS</td>";
     echo "</th><tbody>";
-    /*foreach($items as $item) {
-        echo "<tr>";
-        foreach($item as $data) {
-            echo "<td>".$data."</td>";
-        }
-        echo "</tr>";
-    }*/
-
     foreach($numbers as $number) {
         $numberId = $number->getId();
         echo "<tr>";
@@ -52,7 +41,13 @@
 
     echo "</tbody></table>";
 
+    echo "<h2>PAgination</h2>";
+
+    for($i=1; $i<=$pages; $i++)
+    echo "<a href='/index.php?page=".$i."'>".(($i==$page)?('<b>'.$i.'</b>'):$i)."</a>";
+
     echo "
+    <h1>CREATE NEW NUMBER</h1>
     <form action='/router.php' method='GET'>
         <label>Slug<input type='text' name='slug'></label>
         <label>Title<input type='text' name='title'></label>

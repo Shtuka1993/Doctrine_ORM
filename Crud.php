@@ -45,29 +45,38 @@
         }
 
         public function readNumbersPaginate($page = 1) {               
-            $dql = 'SELECT n FROM '.self::ENTITY_NAME; 
+            // get the user repository
+            $numbers =  $this->entityManager->getRepository(Number::class);
 
-            $query = $this->entityManager->createQuery($dql)
-                ->setFirstResult(0)
-                ->setMaxResults(self::PER_PAGE);    
+            // build the query for the doctrine paginator
+            $query = $numbers->createQueryBuilder('n')
+                ->getQuery();
 
-            $data = $query->getResult();
-            
-            var_dump($data);
-            die;
+            //set page size
+            $pageSize = self::PER_PAGE;
 
-            $paginator = new Paginator($query);
+            // load doctrine Paginator
+            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
 
+            // you can get total items
+            $totalItems = count($paginator);
 
-            //var_dump($paginator);
-            //die;
+            // get total pages
+            $pagesCount = ceil($totalItems / $pageSize);
 
-            foreach ($paginator as $data) {
-                var_dump($data);
-            }
+            // now get one page's items:
+            $paginator
+                ->getQuery()
+                ->setFirstResult($pageSize * ($page-1)) // set the offset
+                ->setMaxResults($pageSize); // set the limit
 
-            vard_dump($paginator);
-            die;
+            $result = [
+                'page' => $page,
+                'data' => $paginator,
+                'pages' => $pagesCount
+            ];
+
+            return $result;
         }
 
         public function updateNumber($slug, $title, $text, $transcription) {
