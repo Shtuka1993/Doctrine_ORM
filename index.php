@@ -2,7 +2,6 @@
     require_once("bootstrap.php");
     require_once("Crud.php");
 
-    
     $crudInterface = new Crud($entityManager);
 
     $page = 1;
@@ -13,7 +12,8 @@
     //$pagination = $crudInterface->readNumbersPaginate($page);
     $filters = (isset($_GET['filters']))?array_filter($_GET['filters']):[];
     $sortings = (isset($_GET['sortings']))?array_filter($_GET['sortings']):[];;
-    $pagination = $crudInterface->readNumbersWithFilterAndSortings($page, $filters, $sortings);
+    //$pagination = $crudInterface->readNumbersWithFilterAndSortings($page, $filters, $sortings);
+    $pagination = $crudInterface->readNumbers($page, $filters, $sortings);
     $numbers = $pagination['data'];
     $currentPage = $pagination['page'];
     $pages = $pagination['pages'];
@@ -47,7 +47,6 @@
             echo "<td>".$number->getNumber()."</td>";
             echo "<td>".$number->getTranscription()."</td>";
             echo "<td><a href='/router.php?method=read&id=".$numberId."'>View</a> <a href='/router.php?method=edit&id=".$numberId."'>Edit</a> <a href='/router.php?method=delete&id=".$numberId."'>Delete</a></td>";
-            //echo "<td>".$number->getDate()."</td>";
         echo "</tr>";
     }
 
@@ -60,7 +59,7 @@
 
     echo "
     <h1>CREATE NEW NUMBER</h1>
-    <form action='/route.php' method='GET'>
+    <form action='/router.php' method='GET'>
         <label>Slug<input type='text' name='slug'></label>
         <label>Title<input type='text' name='title'></label>
         <label>Text<input type='text' name='text'></label>

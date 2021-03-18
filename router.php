@@ -1,4 +1,6 @@
 <?php
+    //Router for handling different URIs and CRUDs methods for Number
+
     require_once('bootstrap.php');
     require_once("Crud.php");
     if(isset($_GET)) {

@@ -1,4 +1,6 @@
 <?php
+    //Form for updating of number
+
     echo "<a href='/'>Home</a>";
     echo "<h1>VIEW NUMBER</h1>";
     echo "<h2><b>ID</b>: ".$_GET['id']."</h2>";

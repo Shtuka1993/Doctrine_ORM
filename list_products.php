@@ -1,5 +1,5 @@
 <?php
-// list_products.php
+//Comand line method for displaying of Products instances
 require_once "bootstrap.php";
 
 $productRepository = $entityManager->getRepository('Product');

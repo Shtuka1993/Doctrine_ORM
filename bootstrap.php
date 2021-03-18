@@ -1,4 +1,5 @@
 <?php
+//File for configuration and connection to DB
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;

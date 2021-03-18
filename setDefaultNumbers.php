@@ -1,4 +1,6 @@
 <?php
+    //Comand line module for adding data to number table
+
     require_once("bootstrap.php");
     $newNumbersData = [
         ["A0", "Zero", 0, "Null", "Нуль"], 

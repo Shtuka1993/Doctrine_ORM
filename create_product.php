@@ -1,4 +1,5 @@
 <?php
+//Comand line app for criating product using comand line argument as data
 require_once "bootstrap.php";
 
 $newProductName = $argv[1];
