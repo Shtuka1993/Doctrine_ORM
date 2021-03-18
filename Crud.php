@@ -164,8 +164,40 @@
             $numbers =  $this->entityManager->getRepository(Number::class);
 
             // build the query for the doctrine paginator
-            $query = $numbers->createQueryBuilder('n')
-                ->getQuery();
+            $query = $numbers->createQueryBuilder('n');
+
+            //Adding searching parametters
+            if(!empty($filters['slug'])) {
+                $query = $query->andWhere('n.slug like :slug');
+            }
+            if(!empty($filters['title'])) {
+                $query = $query->andWhere('n.title like :title');
+            }
+            if(!empty($filters['number'])) {
+                $query = $query->andWhere('n.number like :number');
+            }
+            if(!empty($filters['text'])) {
+                $query = $query->andWhere('n.text like :text');
+            }
+            if(!empty($filters['transcription'])) {
+                $query = $query->andWhere('n.transcription like :transcription');
+            }
+
+            //setting parametters for query
+            if(!empty($filters['slug'])) {
+                $query = $query->setParameter('slug', $filters['slug']);
+            } if(!empty($filters['title'])) {
+                $query = $query->setParameter('title', $filters['title']);
+            } if(!empty($filters['number'])) {
+                $query = $query->setParameter('number', $filters['number']);
+            } if(!empty($filters['text'])) {
+                $query = $query->setParameter('text', $filters['text']);
+            } if(!empty($filters['transcription'])) {
+                $query = $query->setParameter('transcription', $filters['transcription']);
+            }
+
+
+            $query = $query->getQuery();
 
             //set page size
             $pageSize = self::PER_PAGE;
