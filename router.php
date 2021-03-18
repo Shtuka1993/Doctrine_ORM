@@ -38,12 +38,12 @@
                 break;
             case 'update':
                 $id = $_GET['id'];
-                $numberEntety = $crudInterface->readNumber($id);
-                $slug = $numberEntety->getSlug; 
-                $title = $numberEntety->getTitle;
-                $number = $numberEntety->getNumber;
-                $text = $numberEntety->getText;
-                $transcription = $numberEntety->getTranscription;
+                $slug = $_GET['slug']; 
+                $title = $_GET['title'];
+                $number = $_GET['number'];
+                $text = $_GET['text'];
+                $transcription = $_GET['transcription'];
+                $crudInterface->updateNumber($id, $slug, $title, $number, $text, $transcription);
                 header('Location: /');
                 break;
             case 'delete':

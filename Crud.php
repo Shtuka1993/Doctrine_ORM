@@ -207,7 +207,17 @@
          * @return bool 
          */
         public function updateNumber(int $id, string $slug, string $title, int $number, string $text, string $transcription):bool {
+            $numberEntity = $this->entityManager->find('Number', $id);
 
+            $numberEntity->setSlug($slug);
+            $numberEntity->setTitle($title);
+            $numberEntity->setNumber($number);
+            $numberEntity->setText($text);
+            $numberEntity->setTranscription($transcription);
+            $this->entityManager->persist($numberEntity);
+            $this->entityManager->flush();
+
+            return true;
         }
 
         /**
