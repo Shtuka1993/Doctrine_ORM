@@ -155,16 +155,19 @@
          * 
          * @param int page
          * @param array filters
-         * @param array sortings
+         * @param string sorting
          * 
          * @return array
          */
-        public function readNumbers($page = 1, $filters = [], $sortings = []) {               
+        public function readNumbers(int $page = 1, array $filters = [], string $sorting = "ASC") {               
             // get the user repository
             $numbers =  $this->entityManager->getRepository(Number::class);
 
             // build the query for the doctrine paginator
             $query = $numbers->createQueryBuilder('n');
+
+            //setting sorting
+            $query = $query->orderBy('n.slug', $sorting);
 
             //Adding searching parametters
             if(!empty($filters['slug'])) {
@@ -195,7 +198,6 @@
             } if(!empty($filters['transcription'])) {
                 $query = $query->setParameter('transcription', $filters['transcription']);
             }
-
 
             $query = $query->getQuery();
 

@@ -11,9 +11,9 @@
 
     //$pagination = $crudInterface->readNumbersPaginate($page);
     $filters = (isset($_GET['filters']))?array_filter($_GET['filters']):[];
-    $sortings = (isset($_GET['sortings']))?array_filter($_GET['sortings']):[];;
+    $sorting = (isset($_GET['sorting']))?$_GET['sorting']:"ASC";;
     //$pagination = $crudInterface->readNumbersWithFilterAndSortings($page, $filters, $sortings);
-    $pagination = $crudInterface->readNumbers($page, $filters, $sortings);
+    $pagination = $crudInterface->readNumbers($page, $filters, $sorting);
     $numbers = $pagination['data'];
     $currentPage = $pagination['page'];
     $pages = $pagination['pages'];
@@ -30,11 +30,18 @@
     echo "</th><tbody>";
     echo "<tr><form method='GET' action='/'>";
         echo "<td>Find</td>";   
-        echo "<td><input type='text' name='filters[slug]'></td>";
-        echo "<td><input type='text' name='filters[title]'></td>";
-        echo "<td><input type='text' name='filters[text]'></td>";
-        echo "<td><input type='text' name='filters[number]'></td>";
-        echo "<td><input type='text' name='filters[transcription]'></td>";
+        echo "<td><input type='text' name='filters[slug]' value='".$filters['slug']."'><br>
+            <input type='radio' name='sorting' value='ASC' ".(($sorting=="ASC")?"checked":"").">ASC<br>
+            <input type='radio' name='sorting' value='DESC' ".(($sorting=="DESC")?"checked":"").">DESC
+        </td>";
+        echo "<td><input type='text' name='filters[title]' value='".$filters['title']."'>
+        </td>";
+        echo "<td><input type='text' name='filters[text]' value='".$filters['text']."'>
+        </td>";
+        echo "<td><input type='text' name='filters[number]' value='".$filters['number']."'>
+        </td>";
+        echo "<td><input type='text' name='filters[transcription]' value='".$filters['transcription']."'>
+        </td>";
         echo "<td><input type='submit' value='search'></td>";
     echo "</form></tr>";
     foreach($numbers as $number) {
