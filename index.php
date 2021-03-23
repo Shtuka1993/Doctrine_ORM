@@ -9,10 +9,8 @@
         $page = $_GET['page'];
     }
 
-    //$pagination = $crudInterface->readNumbersPaginate($page);
     $filters = (isset($_GET['filters']))?array_filter($_GET['filters']):[];
     $sorting = (isset($_GET['sorting']))?$_GET['sorting']:"ASC";;
-    //$pagination = $crudInterface->readNumbersWithFilterAndSortings($page, $filters, $sortings);
     $pagination = $crudInterface->readNumbers($page, $filters, $sorting);
     $numbers = $pagination['data'];
     $currentPage = $pagination['page'];
@@ -75,5 +73,4 @@
         <input type='hidden' name='method' value='create'>
         <input type='submit' value='OK'>
     </form>";
-    $crudInterface->readNumbersPaginate();
 ?>

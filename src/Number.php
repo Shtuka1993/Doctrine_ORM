@@ -94,4 +94,13 @@ class Number {
     public function setTranscription($transcription) {
         $this->transcription = $transcription;
     }
+
+    public function setData($slug, $title, $number, $text, $transcription) {
+        $this->setSlug($slug);
+        $this->setTitle($title);
+        $this->setNumber($number);
+        $this->setText($text);
+        $this->setTranscription($transcription);
+        $this->setDate(new DateTime());
+    }
 }

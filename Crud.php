@@ -39,12 +39,7 @@
          */
         public function createNumber(string $slug, string $title, int $number, string $text, string $transcription):bool {
             $numberEntity = new Number();
-            $numberEntity->setSlug($slug);
-            $numberEntity->setTitle($title);
-            $numberEntity->setNumber($number);
-            $numberEntity->setText($text);
-            $numberEntity->setTranscription($transcription);
-            $numberEntity->setDate(new DateTime());
+            $numberEntity->setData($slug, $title, $number, $text, $transcription);
             $this->entityManager->persist($numberEntity);
             $this->entityManager->flush();
 
@@ -59,21 +54,10 @@
          * @return object
          */
         public function readNumber(int $id):object {
-            $number = $this->entityManager->find('Number', $id);
+            $number = $this->entityManager->find(Number::class, $id);
 
             return $number;
         }
-
-        /**
-         * Search numbers
-         * 
-         * @param slug
-         * @param title
-         * @param text
-         * @param transcription
-         * @param date
-         */
-        public function findNumbers($slug = null, $title = null, $text = null, $transcription = null, $date = null) {}
 
         /**
          * Read all numbers
@@ -81,7 +65,7 @@
          * @return object
          */
         public function readAllNumbers():object {
-            $numberRepository = $this->entityManager->getRepository('Number');
+            $numberRepository = $this->entityManager->getRepository(Number::class);
             $numbers = $numberRepository->findAll();
 
             return $numbers;
@@ -90,21 +74,12 @@
         /**
          * Reads numbers paginated
          * 
+         * @param object query
          * @param int page
          * 
          * @return array
          */
-        public function readNumbersPaginate(int $page = 1):array {               
-            // get the user repository
-            $numbers =  $this->entityManager->getRepository(Number::class);
-
-            // build the query for the doctrine paginator
-            $query = $numbers->createQueryBuilder('n')
-                ->getQuery();
-
-            //set page size
-            $pageSize = self::PER_PAGE;
-
+        public function readNumbersPaginate(object $query, int $page = 1):array {               
             // load doctrine Paginator
             $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
 
@@ -112,13 +87,13 @@
             $totalItems = count($paginator);
 
             // get total pages
-            $pagesCount = ceil($totalItems / $pageSize);
+            $pagesCount = ceil($totalItems / self::PER_PAGE);
 
             // now get one page's items:
             $paginator
                 ->getQuery()
-                ->setFirstResult($pageSize * ($page-1)) // set the offset
-                ->setMaxResults($pageSize); // set the limit
+                ->setFirstResult(self::PER_PAGE * ($page-1)) // set the offset
+                ->setMaxResults(self::PER_PAGE); // set the limit
 
             $result = [
                 'page' => $page,
@@ -201,29 +176,7 @@
 
             $query = $query->getQuery();
 
-            //set page size
-            $pageSize = self::PER_PAGE;
-
-            // load doctrine Paginator
-            $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
-
-            // you can get total items
-            $totalItems = count($paginator);
-
-            // get total pages
-            $pagesCount = ceil($totalItems / $pageSize);
-
-            // now get one page's items:
-            $paginator
-                ->getQuery()
-                ->setFirstResult($pageSize * ($page-1)) // set the offset
-                ->setMaxResults($pageSize); // set the limit
-
-            $result = [
-                'page' => $page,
-                'data' => $paginator,
-                'pages' => $pagesCount
-            ];
+            $result = $this->readNumbersPaginate($query, $page);
 
             return $result;
         }
@@ -241,13 +194,8 @@
          * @return bool 
          */
         public function updateNumber(int $id, string $slug, string $title, int $number, string $text, string $transcription):bool {
-            $numberEntity = $this->entityManager->find('Number', $id);
-
-            $numberEntity->setSlug($slug);
-            $numberEntity->setTitle($title);
-            $numberEntity->setNumber($number);
-            $numberEntity->setText($text);
-            $numberEntity->setTranscription($transcription);
+            $numberEntity = $this->entityManager->find(Number::class, $id);
+            $numberEntity->setData($slug, $title, $number, $text, $transcription);
             $this->entityManager->persist($numberEntity);
             $this->entityManager->flush();
 
